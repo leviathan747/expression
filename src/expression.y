@@ -2,6 +2,7 @@
 #include "expression.h"
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 extern int yylex();
 extern int yylex_destroy(void);
 extern int yyparse();
@@ -52,7 +53,7 @@ integer_multiplication        : integer_exponentiation TIMES integer_exponentiat
                               | integer_exponentiation                               { $$ = $1; }
                               ;
 
-integer_exponentiation        : primary_integer_expression POWER primary_integer_expression { $$ = 0; }
+integer_exponentiation        : primary_integer_expression POWER primary_integer_expression { $$ = (int)pow( $1, $3 ); }
                               | primary_integer_expression                                  { $$ = $1; }
                               ;
 

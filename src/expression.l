@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 #define YY_DECL int yylex()
 #include "expression.h"
 #include "expression.tab.h"
@@ -18,12 +19,12 @@ YY_BUFFER_STATE expression_buffer_state;
 [ \t\f\n\r]+ ; // ignore all whitespace
 
 "/"   return DIVIDE;
-"("   return LPAREN;
+"["   return LPAREN;
 "-"   return MINUS;
 "+"   return PLUS;
-"**"  return POWER;
-")"   return RPAREN;
-"*"   return TIMES;
+"^"   return POWER;
+"]"   return RPAREN;
+"x"   return TIMES;
 
 "abs" return ABS;
 "rem" return REM;
@@ -33,7 +34,7 @@ YY_BUFFER_STATE expression_buffer_state;
 (0|[1-9][0-9]*)               { yylval.ival = atoi( yytext ); return INTEGER; }
 ([1-9][0-9]*|0)?\.[0-9][0-9]* { yylval.rval = atof( yytext ); return REAL; }
 
-. { /* printf( "0x%x, '%s'\n", yytext[0], yytext ); */ yyerror( "Unrecognized token" ); return UNRECOGNIZED_TOKEN; }
+. {  printf( "0x%x, '%s'\n", yytext[0], yytext );  yyerror( "Unrecognized token" ); return UNRECOGNIZED_TOKEN; }
 
 %%
 
