@@ -1,21 +1,25 @@
 CC=gcc
-CFLAGS=-Wno-pointer-to-int-cast -Iinclude -Iinclude-gen # -g
-SOURCES := $(shell ls src/*.c) src-gen/lex.yy.c src-gen/expression.tab.c
-OBJECTS=$(SOURCES:.c=.o)
+CFLAGS=# -g
 EXECUTABLE="="
 
-all: src-gen/lex.yy.c src-gen/expression.tab.c include-gen/expression.tab.h $(SOURCES) $(EXECUTABLE)
+all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CC) $(CFLAGS) $^ -o $@
+$(EXECUTABLE): parser lexer bin/expression.o bin/expression.tab.o bin/lex.yy.o
+	$(CC) $(CFLAGS) bin/*.o -o $@
 
-.o:
-	$(CC) $(CFLAGS) -c $< -o
+bin/expression.o: src/expression.c
+	$(CC) $(CFLAGS) -Iinclude -Iinclude-gen -c src/expression.c -o bin/expression.o
 
-src-gen/expression.tab.c include-gen/expression.tab.h: src/expression.y
+bin/expression.tab.o: src-gen/expression.tab.c
+	$(CC) $(CFLAGS) -Iinclude -Iinclude-gen -c src-gen/expression.tab.c -o bin/expression.tab.o
+
+bin/lex.yy.o: src-gen/lex.yy.c
+	$(CC) $(CFLAGS) -Iinclude -Iinclude-gen -c src-gen/lex.yy.c -o bin/lex.yy.o
+
+parser: src/expression.y
 	bison --defines=include-gen/expression.tab.h -o src-gen/expression.tab.c src/expression.y
 
-src-gen/lex.yy.c: src/expression.l include-gen/expression.tab.h
+lexer: parser
 	flex -o src-gen/lex.yy.c src/expression.l
 
 clean:
