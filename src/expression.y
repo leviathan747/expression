@@ -22,20 +22,42 @@ void expression_clear_buffer();
 %token<ival> INTEGER
 %token<rval> REAL
 
-%token DIVIDE LPAREN MINUS PLUS POWER RPAREN TIMES
+%token DIVIDE TIMES MINUS PLUS POWER LPAREN RPAREN
 %token ABS REM NULL_TERMINATOR UNRECOGNIZED_TOKEN
+
+%type<ival> integer_expression
+%type<ival> integer_addition
+%type<ival> integer_multiplication
+%type<ival> integer_exponentiation
+%type<ival> primary_integer_expression
 
 %start expression
 
 %%
 
-expression                    : addition_expression NULL_TERMINATOR
+expression                    : integer_expression { printf( "%d\n", $1 ); } NULL_TERMINATOR
+                              /* | real_expression { printf( "%f\n", $1 ); } NULL_TERMINATOR */
                               ;
 
-addition_expression           : INTEGER PLUS INTEGER
-                                {
-                                  printf( "%d\n", $1 + $3 );
-                                }
+integer_expression            : integer_addition { $$ = $1; }
+                              ;
+
+integer_addition              : integer_multiplication PLUS integer_multiplication  { $$ = $1 + $3; }
+                              | integer_multiplication MINUS integer_multiplication { $$ = $1 - $3; }
+                              | integer_multiplication                              { $$ = $1; }
+                              ;
+
+integer_multiplication        : integer_exponentiation TIMES integer_exponentiation  { $$ = $1 * $3; }
+                              | integer_exponentiation DIVIDE integer_exponentiation { $$ = $1 / $3; }
+                              | integer_exponentiation                               { $$ = $1; }
+                              ;
+
+integer_exponentiation        : primary_integer_expression POWER primary_integer_expression { $$ = 0; }
+                              | primary_integer_expression                                  { $$ = $1; }
+                              ;
+
+primary_integer_expression    : INTEGER                          { $$ = $1; }
+                              | LPAREN integer_expression RPAREN { $$ = $2; }
                               ;
 
 %%
