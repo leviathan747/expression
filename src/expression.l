@@ -28,8 +28,8 @@ YY_BUFFER_STATE expression_buffer_state;
 
 \0\0* return NULL_TERMINATOR;
 
-(0|[1-9][0-9]*)               { yylval.ival = atoi( yytext ); return INTEGER; }
-([1-9][0-9]*|0)?\.[0-9][0-9]* { yylval.rval = atof( yytext ); return REAL; }
+(0|-?[1-9][0-9]*)               { yylval.ival = atoi( yytext ); return INTEGER; }
+-?([1-9][0-9]*|0)?\.[0-9][0-9]* { yylval.rval = atof( yytext ); return REAL; }
 
 . {  printf( "0x%x, '%s'\n", yytext[0], yytext );  yyerror( "Unrecognized token" ); return UNRECOGNIZED_TOKEN; }
 
