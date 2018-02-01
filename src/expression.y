@@ -24,7 +24,7 @@ void expression_clear_buffer();
 %token<rval> REAL
 
 %token DIVIDE TIMES MINUS PLUS POWER LPAREN RPAREN
-%token ABS REM NULL_TERMINATOR UNRECOGNIZED_TOKEN
+%token MOD NULL_TERMINATOR UNRECOGNIZED_TOKEN
 
 %type<ival> integer_expression
 %type<ival> integer_addition
@@ -50,6 +50,7 @@ integer_addition              : integer_multiplication PLUS integer_multiplicati
 
 integer_multiplication        : integer_exponentiation TIMES integer_exponentiation  { $$ = $1 * $3; }
                               | integer_exponentiation DIVIDE integer_exponentiation { $$ = $1 / $3; }
+                              | integer_exponentiation MOD integer_exponentiation    { $$ = $1 % $3; }
                               | integer_exponentiation                               { $$ = $1; }
                               ;
 

@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 #define YY_DECL int yylex()
 #include "expression.h"
 #include "expression.tab.h"
@@ -18,16 +17,14 @@ YY_BUFFER_STATE expression_buffer_state;
 
 [ \t\f\n\r]+ ; // ignore all whitespace
 
-"/"   return DIVIDE;
-"["   return LPAREN;
-"-"   return MINUS;
-"+"   return PLUS;
-"^"   return POWER;
-"]"   return RPAREN;
-"x"   return TIMES;
-
-"abs" return ABS;
-"rem" return REM;
+"/" return DIVIDE;
+"[" return LPAREN;
+"-" return MINUS;
+"+" return PLUS;
+"^" return POWER;
+"]" return RPAREN;
+"x" return TIMES;
+"%" return MOD;
 
 \0\0* return NULL_TERMINATOR;
 
