@@ -49,19 +49,19 @@ expression                    : integer_expression { printf( "%d\n", $1 ); } NUL
 integer_expression            : integer_addition { $$ = $1; }
                               ;
 
-integer_addition              : integer_multiplication PLUS integer_multiplication  { $$ = $1 + $3; }
-                              | integer_multiplication MINUS integer_multiplication { $$ = $1 - $3; }
-                              | integer_multiplication                              { $$ = $1; }
+integer_addition              : integer_addition PLUS integer_addition  { $$ = $1 + $3; }
+                              | integer_addition MINUS integer_addition { $$ = $1 - $3; }
+                              | integer_multiplication                  { $$ = $1; }
                               ;
 
-integer_multiplication        : integer_exponentiation TIMES integer_exponentiation  { $$ = $1 * $3; }
-                              | integer_exponentiation DIVIDE integer_exponentiation { $$ = $1 / $3; }
-                              | integer_exponentiation MOD integer_exponentiation    { $$ = $1 % $3; }
+integer_multiplication        : integer_multiplication TIMES integer_multiplication  { $$ = $1 * $3; }
+                              | integer_multiplication DIVIDE integer_multiplication { $$ = $1 / $3; }
+                              | integer_multiplication MOD integer_multiplication    { $$ = $1 % $3; }
                               | integer_exponentiation                               { $$ = $1; }
                               ;
 
-integer_exponentiation        : primary_integer_expression POWER primary_integer_expression { $$ = (int)pow( $1, $3 ); }
-                              | primary_integer_expression                                  { $$ = $1; }
+integer_exponentiation        : integer_exponentiation POWER integer_exponentiation { $$ = (int)pow( $1, $3 ); }
+                              | primary_integer_expression                          { $$ = $1; }
                               ;
 
 primary_integer_expression    : INTEGER                          { $$ = $1; }
@@ -71,28 +71,28 @@ primary_integer_expression    : INTEGER                          { $$ = $1; }
 real_expression               : real_addition { $$ = $1; }
                               ;
 
-real_addition                 : real_multiplication PLUS real_multiplication     { $$ = $1 + $3; }
-                              | integer_multiplication PLUS real_multiplication  { $$ = (double)$1 + $3; }
-                              | real_multiplication PLUS integer_multiplication  { $$ = $1 + (double)$3; }
-                              | real_multiplication MINUS real_multiplication    { $$ = $1 - $3; }
-                              | integer_multiplication MINUS real_multiplication { $$ = (double)$1 - $3; }
-                              | real_multiplication MINUS integer_multiplication { $$ = $1 - (double)$3; }
-                              | real_multiplication                              { $$ = $1; }
+real_addition                 : real_addition PLUS real_addition     { $$ = $1 + $3; }
+                              | integer_addition PLUS real_addition  { $$ = (double)$1 + $3; }
+                              | real_addition PLUS integer_addition  { $$ = $1 + (double)$3; }
+                              | real_addition MINUS real_addition    { $$ = $1 - $3; }
+                              | integer_addition MINUS real_addition { $$ = (double)$1 - $3; }
+                              | real_addition MINUS integer_addition { $$ = $1 - (double)$3; }
+                              | real_multiplication                  { $$ = $1; }
                               ;
 
-real_multiplication           : real_exponentiation TIMES real_exponentiation     { $$ = $1 * $3; }
-                              | integer_exponentiation TIMES real_exponentiation  { $$ = (double)$1 * $3; }
-                              | real_exponentiation TIMES integer_exponentiation  { $$ = $1 * (double)$3; }
-                              | real_exponentiation DIVIDE real_exponentiation    { $$ = $1 / $3; }
-                              | integer_exponentiation DIVIDE real_exponentiation { $$ = (double)$1 / $3; }
-                              | real_exponentiation DIVIDE integer_exponentiation { $$ = $1 / (double)$3; }
+real_multiplication           : real_multiplication TIMES real_multiplication     { $$ = $1 * $3; }
+                              | integer_multiplication TIMES real_multiplication  { $$ = (double)$1 * $3; }
+                              | real_multiplication TIMES integer_multiplication  { $$ = $1 * (double)$3; }
+                              | real_multiplication DIVIDE real_multiplication    { $$ = $1 / $3; }
+                              | integer_multiplication DIVIDE real_multiplication { $$ = (double)$1 / $3; }
+                              | real_multiplication DIVIDE integer_multiplication { $$ = $1 / (double)$3; }
                               | real_exponentiation                               { $$ = $1; }
                               ;
 
-real_exponentiation           : primary_real_expression POWER primary_real_expression    { $$ = pow( $1, $3 ); }
-                              | primary_integer_expression POWER primary_real_expression { $$ = pow( $1, $3 ); }
-                              | primary_real_expression POWER primary_integer_expression { $$ = pow( $1, $3 ); }
-                              | primary_real_expression                                  { $$ = $1; }
+real_exponentiation           : real_exponentiation POWER real_exponentiation    { $$ = pow( $1, $3 ); }
+                              | integer_exponentiation POWER real_exponentiation { $$ = pow( $1, $3 ); }
+                              | real_exponentiation POWER integer_exponentiation { $$ = pow( $1, $3 ); }
+                              | primary_real_expression                          { $$ = $1; }
                               ;
 
 primary_real_expression       : REAL                          { $$ = $1; }
