@@ -17,10 +17,13 @@ bin/lex.yy.o: src-gen/lex.yy.c
 	$(CC) $(CFLAGS) -Iinclude -Iinclude-gen -c src-gen/lex.yy.c -o bin/lex.yy.o
 
 parser: src/expression.y
-	bison --defines=include-gen/expression.tab.h -o src-gen/expression.tab.c src/expression.y
+	bison --verbose --defines=include-gen/expression.tab.h -o src-gen/expression.tab.c src/expression.y
 
 lexer: parser
 	flex -o src-gen/lex.yy.c src/expression.l
 
 clean:
 	rm -f "=" bin/* src-gen/* include-gen/*
+
+%.c: %.y
+%.c: %.l
