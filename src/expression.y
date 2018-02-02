@@ -52,24 +52,24 @@ expression                    : addition
                               ;
 
 
-addition                      : addition PLUS multiplication  { $$ = combine_expressions( $1, $3, PLUS ); }
-                              | addition MINUS multiplication { $$ = combine_expressions( $1, $3, MINUS ); }
-                              | multiplication                        { $$ = $1; }
+addition                      : addition PLUS multiplication              { $$ = combine_expressions( $1, $3, PLUS ); }
+                              | addition MINUS multiplication             { $$ = combine_expressions( $1, $3, MINUS ); }
+                              | multiplication                            { $$ = $1; }
                               ;
 
-multiplication                : multiplication TIMES exponentiation  { $$ = combine_expressions( $1, $3, TIMES ); }
-                              | multiplication DIVIDE exponentiation { $$ = combine_expressions( $1, $3, DIVIDE ); }
-                              | multiplication MOD exponentiation    { $$ = combine_expressions( $1, $3, MOD ); }
-                              | exponentiation                               { $$ = $1; }
+multiplication                : multiplication TIMES exponentiation       { $$ = combine_expressions( $1, $3, TIMES ); }
+                              | multiplication DIVIDE exponentiation      { $$ = combine_expressions( $1, $3, DIVIDE ); }
+                              | multiplication MOD exponentiation         { $$ = combine_expressions( $1, $3, MOD ); }
+                              | exponentiation                            { $$ = $1; }
                               ;
 
-exponentiation                : exponentiation POWER primary_expression { $$ = combine_expressions( $1, $3, POWER ); }
-                              | primary_expression                              { $$ = $1; }
+exponentiation                : exponentiation POWER primary_expression   { $$ = combine_expressions( $1, $3, POWER ); }
+                              | primary_expression                        { $$ = $1; }
                               ;
 
-primary_expression            : INTEGER                          { $$ = new_integer( $1 ); }
-                              | REAL                             { $$ = new_real( $1 ); }
-                              | LPAREN expression RPAREN { $$ = $2; }
+primary_expression            : INTEGER                                   { $$ = new_integer( $1 ); }
+                              | REAL                                      { $$ = new_real( $1 ); }
+                              | LPAREN expression RPAREN                  { $$ = $2; }
                               ;
 
 %%

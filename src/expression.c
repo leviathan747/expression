@@ -91,6 +91,7 @@ expression_t * combine_expressions( expression_t * op1, expression_t * op2, int 
           new_expr->value.ival = (int)pow( op1->value.ival, op2->value.ival );
           break;
         default:
+          new_expr->value.ival = 0;
           break;
       }
     }
